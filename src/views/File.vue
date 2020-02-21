@@ -9,13 +9,16 @@
 
          <form action="/api/price-elasticity/data" method="post">
             <div class="file-field input-field">
-            <div class="btn">
-                <span>File</span>
-                <input type="file">
+                <div class="btn">
+                    <span>Выбрать файл</span>
+                    <input type="file">
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                </div>
             </div>
-            <div class="file-path-wrapper">
-                <input class="file-path validate" type="text">
-            </div>
+            <div>
+                <button type="submit" class="btn">Загрузить</button>
             </div>
         </form>
     </div>
