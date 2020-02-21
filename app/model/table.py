@@ -30,10 +30,22 @@ class PriceData(UtilityTable, db.Model):
     __tablename__ = 'price_data'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    date = db.Column(db.DateTime, nullable=False)
     ticket_type = db.Column(db.String(255))
-    count = db.Column(db.Integer)
+    date = db.Column(db.DateTime, nullable=False)
     price = db.Column(db.Float)
+    count = db.Column(db.Integer)
     season = db.Column(db.String(255))
     day_week = db.Column(db.String(255))
     workday = db.Column(db.Integer)
+
+class Config(UtilityTable, db.Model):
+
+    __tablename__ = 'config'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    pe_season_start = db.Column(db.DateTime)
+    pe_seasion_end = db.Column(db.DateTime)
+
+    pe_weak_start = db.Column(db.DateTime)
+    pe_weak_end = db.Column(db.DateTime)
