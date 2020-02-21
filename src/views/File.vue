@@ -7,19 +7,10 @@
         <p>Цена (формат: ХХХХ.ХХ)</p>
         <p>Количество билетов (формат: ХХХХ)</p>
 
-         <form action="/api/price-elasticity/data" method="post">
-            <div class="file-field input-field">
-                <div class="btn">
-                    <span>Выбрать файл</span>
-                    <input type="file">
-                </div>
-                <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text">
-                </div>
-            </div>
-            <div>
-                <button type="submit" class="btn">Загрузить</button>
-            </div>
+        <form action="/api/price-elasticity/data" method="post"
+         enctype = "multipart/form-data">
+            <input type = "file" name = "file" class="input"/>
+            <input type = "submit"/>
         </form>
     </div>
 </template>

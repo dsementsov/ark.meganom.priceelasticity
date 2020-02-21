@@ -18,6 +18,7 @@
   color: #2c3e50;
   max-width: 80em;
   margin: 0 auto;
+  padding: 2.5em;
 }
 #nav {
   padding: 30px;

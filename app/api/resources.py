@@ -55,8 +55,10 @@ class PriceElasticiyRoots(Resource):
 class PriceElasticityData(Resource):
 
     def post(self):
-        f = request.files.get('file')
 
+        f = request.files['file']
         df = pd.read_excel(f)
 
+        print(df.head())
+        print(df)
         return {'status': 'OK', 'message': 'OK'}

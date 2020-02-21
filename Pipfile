@@ -14,6 +14,8 @@ sqlalchemy = "*"
 flask-heroku = "*"
 flask-sqlalchemy = "*"
 flask-restx = "*"
+xlrd = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 pytest = "*"
