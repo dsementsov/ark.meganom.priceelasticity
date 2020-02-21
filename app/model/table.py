@@ -29,6 +29,7 @@ class PriceData(UtilityTable, db.Model):
 
     __tablename__ = 'price_data'
 
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     date = db.Column(db.DateTime, nullable=False)
     ticket_type = db.Column(db.String(255))
     count = db.Column(db.Integer)
