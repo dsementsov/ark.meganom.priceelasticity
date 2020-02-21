@@ -4,7 +4,6 @@ import statsmodels.api as sm
 import statsmodels.formula.api as smf
 from sqlalchemy.orm import create_session
 from app.model.table import PriceData
-from app import db
 
 
 def get_data(season, workday, ticket_type):
@@ -15,7 +14,7 @@ def get_data(season, workday, ticket_type):
         query = query.filter_by(workday=workday)
     if ticket_type:
         query = query.filter_by(ticket_type=ticket_type)
-    df = pd.read_sql(query, db.session)
+    df = pd.read_sql(query, PriceData.session)
     return df
 
 def prep_data(df, bins, log_q=True):
