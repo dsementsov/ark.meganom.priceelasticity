@@ -6,6 +6,7 @@ http://flask-restplus.readthedocs.io
 from datetime import datetime
 from flask import request
 from flask_restx import Resource
+import json
 
 import pandas as pd
 
@@ -56,23 +57,25 @@ class PriceElasticityData(Resource):
 
     def post(self):
 
-        from app.model.table import PriceData, Config
+        from app.model.table import Config
+        from app import db
 
         f = request.files['file']
         df = pd.read_excel(f)
-        cols = df.cols
+        cols = df.columns
         df = df[[cols[0], cols[1], cols[2], cols[3]]]
+        df.columns = ['ticket_type', 'date', 'price', 'count']
 
-        pe_season_start = datetime.strptime(Config.query.filterby(config_name='pe_seasion_start').first(), 'dd/mm/yyyy')
-        pe_seasion_end = datetime.strptime(Config.query.filterby(config_name='pe_seasion_end').first(), 'dd/mm/yyy')
+        high = Config.query.filter_by(config_name='pe_season_high').first().config_value
+        weak = Config.query.filter_by(config_name='pe_season_weak').first().config_value
 
-        pe_weak_start = datetime.strptime(Config.query.filterby(config_name='pe_weak_start').first(), 'dd/mm/yyyy')
-        pe_weak_end = datetime.strptime(Config.query.filterby(config_name='pe_weak_end').first(), 'dd/mm/yyyy')
+        pe_season_high = json.loads(high)
+        pe_season_weak = json.loads(weak)
 
         def check_season(x):
-            if x >= pe_season_start and x<= pe_seasion_end:
+            if x.month in pe_season_high:
                 return 'high'
-            elif x>= pe_weak_start and x<= pe_weak_end:
+            elif x.month in pe_season_weak:
                 return 'mid'
             else:
                 return 'low'
@@ -81,8 +84,8 @@ class PriceElasticityData(Resource):
         df['day_week'] = df.date.apply(lambda x: x.weekday())
         df['workday'] = df.day_week.apply(lambda x: 1 if x < 6 else 0)
 
-        df.cols = ['ticket_type', 'date', 'price', 'count', 'season', 'day_week', 'workday']
+        df.columns = ['ticket_type', 'date', 'price', 'count', 'season', 'day_week', 'workday']
 
-        df.to_sql('price_data', con=PriceData.season, if_exists='replace')
+        df.to_sql('price_data', con=db.engine, if_exists='replace')
 
         return {'status': 'OK', 'message': 'OK'}
