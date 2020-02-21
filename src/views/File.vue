@@ -6,9 +6,17 @@
         <p>Дата (формат: ДД/ММ/ГГГГ)</p>
         <p>Цена (формат: ХХХХ.ХХ)</p>
         <p>Количество билетов (формат: ХХХХ)</p>
-        <form action="/api/price-elasticity/data" method="post">
-            <input type="file" name="data" id="data">
-            <button type="submit">Upload</button>
+
+         <form action="/api/price-elasticity/data" method="post">
+            <div class="file-field input-field">
+            <div class="btn">
+                <span>File</span>
+                <input type="file">
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
+            </div>
         </form>
     </div>
 </template>
