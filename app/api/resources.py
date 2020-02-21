@@ -60,4 +60,4 @@ class PriceElasticityData(SecureResource):
 
         df = pd.read_excel(f)
 
-        df.colum
+        return {'status': 'OK', 'message': 'OK'}
