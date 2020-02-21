@@ -12,8 +12,6 @@ import pandas as pd
 from .security import require_auth
 from . import api_rest
 
-from app.price_elasticity import price
-
 
 class SecureResource(Resource):
     """ Calls require_auth decorator on all requests """
@@ -34,7 +32,7 @@ class ResourceOne(Resource):
 
 
 @api_rest.route('/secure-resource/<string:resource_id>')
-class SecureResourceOne(SecureResource):
+class SecureResourceOne(Resource):
     """ Unsecure Resource Class: Inherit from Resource """
 
     def get(self, resource_id):
@@ -43,17 +41,18 @@ class SecureResourceOne(SecureResource):
 
 
 @api_rest.route('/price-elasticity/roots/<string:ticket_type>/<string:season>/<string:workday>/<string:intercept>')
-class PriceElasticiyRoots(SecureResource):
+class PriceElasticiyRoots(Resource):
 
     def get(self, ticket_type, season, workday, intercept):
+        from app.price_elasticity import price
         data = price.get_data(ticket_type=ticket_type, season=season, workday=int(workday))
         model = price.get_model(model, bool(intercept))
         p, q = price.get_extrenum(model)
 
         return {'status': 'OK', 'message': {'p': p, 'q': q}}
 
-@api_rest.rout('/price-elasticity/data')
-class PriceElasticityData(SecureResource):
+@api_rest.route('/price-elasticity/data')
+class PriceElasticityData(Resource):
 
     def post(self):
         f = request.files.get('file')
