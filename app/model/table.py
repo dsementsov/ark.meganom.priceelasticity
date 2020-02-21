@@ -44,8 +44,5 @@ class Config(UtilityTable, db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    pe_season_start = db.Column(db.DateTime)
-    pe_seasion_end = db.Column(db.DateTime)
-
-    pe_weak_start = db.Column(db.DateTime)
-    pe_weak_end = db.Column(db.DateTime)
+    config_name = db.Column(db.String(255))
+    config_value = db.Column(db.String(255))
