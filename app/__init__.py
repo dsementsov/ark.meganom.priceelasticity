@@ -3,12 +3,13 @@ from flask import Flask, current_app, send_file
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
 
-from app.api import api_bp
-from app.client import client_bp
-
 app = Flask(__name__, static_folder='../dist/static')
 heroku = Heroku(app)
 db = SQLAlchemy(app)
+
+from app.api import api_bp
+from app.client import client_bp
+
 app.register_blueprint(api_bp)
 # app.register_blueprint(client_bp)
 
