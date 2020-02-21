@@ -7,9 +7,10 @@ from datetime import datetime
 from flask import request
 from flask_restplus import Resource
 
+import pandas as pd
+
 from .security import require_auth
 from . import api_rest
-
 from app.price_elasticity import price
 
 
@@ -49,3 +50,13 @@ class PriceElasticiyRoots(SecureResource):
         p, q = price.get_extrenum(model)
 
         return {'status': 'OK', 'message': {'p': p, 'q': q}}
+
+@api_rest.rout('/price-elasticity/data')
+class PriceElasticityData(SecureResource):
+
+    def post(self):
+        f = request.files.get('file')
+
+        df = pd.read_excel(f)
+
+        df.colum

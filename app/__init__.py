@@ -3,8 +3,8 @@ from flask import Flask, current_app, send_file
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
 
-from .api import api_bp
-from .client import client_bp
+from app.api import api_bp
+from app.client import client_bp
 
 app = Flask(__name__, static_folder='../dist/static')
 app.register_blueprint(api_bp)
