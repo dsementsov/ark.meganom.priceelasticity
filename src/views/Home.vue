@@ -46,7 +46,6 @@
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 import $backend from '@/backend'
 
 export default {
@@ -77,7 +76,7 @@ export default {
       }
       var elems = document.querySelectorAll('select')
       var options = {}
-      var instances = M.FormSelect.init(elems, options)
+      M.FormSelect.init(elems, options)
     })
   },
   methods: {
