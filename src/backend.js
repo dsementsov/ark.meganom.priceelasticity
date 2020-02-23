@@ -23,13 +23,20 @@ $axios.interceptors.response.use(function (response) {
 
 export default {
 
-  fetchResource () {
-    return $axios.get(`resource/xxx`)
+  fetchResults (ticketType, season, workday, intercept) {
+    return $axios.get(`price-elasticity/roots/${ticketType}/${season}/${workday}/${intercept}`,
+      {timeout: 0})
       .then(response => response.data)
   },
-
-  fetchSecureResource () {
-    return $axios.get(`secure-resource/zzz`)
+  getTicketTypes () {
+    return $axios.get(`price-elasticity/ticket-types`)
       .then(response => response.data)
+  },
+  getConfig () {
+    return $axios.get(`price-elasticity/config`)
+      .then(response => response.data.message)
+  },
+  postConfig (body) {
+    return $axios.post(`price-elasticity/config`, body).then(response => response.data)
   }
 }

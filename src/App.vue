@@ -2,8 +2,8 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/upload">Upload New File</router-link> |
       <router-link to="/config">Config</router-link> |
+      <router-link to="/upload">Upload New File</router-link> |
       <router-link to="/theory">Theory</router-link>
     </div>
     <router-view/>

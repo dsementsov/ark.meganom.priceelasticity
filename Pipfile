@@ -16,12 +16,16 @@ flask-sqlalchemy = "*"
 flask-restx = "*"
 xlrd = "*"
 psycopg2-binary = "*"
+boto3 = "*"
+mpld3 = "*"
+matplotlib = "*"
 
 [dev-packages]
 pytest = "*"
 bumpversion = "*"
 pytest-sugar = "*"
 pytest-cov = "*"
+flake8 = "*"
 
 [requires]
 python_version = "3.7"

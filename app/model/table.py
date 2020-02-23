@@ -24,20 +24,6 @@ class UtilityTable:
     def update(self):
         db.session.commit()
 
-
-class PriceData(UtilityTable, db.Model):
-
-    __tablename__ = 'price_data'
-
-    index = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    ticket_type = db.Column(db.String(255))
-    date = db.Column(db.DateTime, nullable=False)
-    price = db.Column(db.Float)
-    count = db.Column(db.Integer)
-    season = db.Column(db.String(255))
-    day_week = db.Column(db.String(255))
-    workday = db.Column(db.Integer)
-
 class Config(UtilityTable, db.Model):
 
     __tablename__ = 'config'

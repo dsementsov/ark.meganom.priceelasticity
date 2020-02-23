@@ -2,68 +2,87 @@ import pandas as pd
 import numpy as np
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
+from io import BytesIO
 from sqlalchemy.orm import create_session
-from app.model.table import PriceData
+from app.model.table import Config
+import boto3
 
 
 def get_data(season, workday, ticket_type):
-    query = PriceData.query
-    if season:
-        query = query.filter_by(season=season)
-    if workday:
-        query = query.filter_by(workday=workday)
-    if ticket_type:
-        query = query.filter_by(ticket_type=ticket_type)
-    df = pd.read_sql(query, PriceData.session)
-    return df
+    print('Reading data from S3')
+    s3 = boto3.client('s3')
+    bucket_name = Config.query.filter_by(config_name='bucket_name').first().config_value
+    target_year = Config.query.filter_by(config_name='pe_target_year').first()
+    obj = s3.get_object(Bucket=bucket_name, Key='pe_data.csv')
+    obj_data = obj['Body'].read()
+    data = pd.read_csv(BytesIO(obj_data), encoding='utf-8')
+    print('Transforming data')
+    if target_year is not None:
+        if target_year.config_value != 'all':
+            data = data[data.year == int(target_year.config_value)]
+    if season != 'all':
+        data = data[data.season == season]
+    if workday != 'all':
+        data = data[data.workday == int(workday)]
+    if ticket_type != 'all':
+        data = data[data.ticket_type == ticket_type]
+    return data
+
 
 def prep_data(df, bins, log_q=True):
-
-    data = df[['price', 'count']]
-
-    data['bin'] = pd.cut(df.Price, bins)
+    print(df)
+    # Only important columns
+    data = df[['price', 'qt']]
+    data = data[data.qt != ' ']
+    data.price = data.price.astype(float)
+    data.qt = data.qt.astype(int)
+    # Binning df
+    data['bin'] = pd.cut(data.price, bins)
     data['average_price'] = data.bin.apply(lambda x: data[data.bin == x].price.mean())
-    data = data.groupby(by=['average_price']).sum().reset_index()
-    data = data[['average_price', 'count']]
+    data['average_price'] = data['average_price'].astype(float)
+    data = data[['average_price', 'qt']].groupby(by=['average_price']).sum().reset_index()
+    data = data[['average_price', 'qt']]
+    print(data)
     if log_q:
-        data['count'] = np.log(data.count)
-
+        data['qt'] = np.log(data.qt)
+    data['qt'] = data['qt'].astype(float)
+    print(data)
     return data
 
 
 def get_model(data, intercept=False):
     if intercept:
-        intercept_formula = ' - 1'
-    else:
         intercept_formula = ''
+    else:
+        intercept_formula = ' - 1'
 
-    model = smf.ols('count ~ np.square(average_price) + average_price'+intercept_formula, data=data).fit()
+    model = smf.ols('qt ~ np.square(average_price) + average_price'+intercept_formula, data=data).fit()
 
     return model
 
+
 def get_extrenum(model):
 
-    roots = get_roots(model, a_multi = ( (2*np.e) + 1), b_multi = (np.e + 1))
-    true_root = roots[1]
+    roots = get_roots(model, a_multi=((2*np.e) + 1), b_multi=(np.e + 1))
+    print("++++++++++++++++++++++++++++++++++++++++++++")
+    print(roots)
+    true_price = roots[1]
 
-    true_quantity = round(np.e**model.predict({"average_price": true_root})[0]+0.5, 0)
+    true_quantity = round(np.e**model.predict({"average_price": true_price})[0]+0.5, 0)
     true_price = round(true_price, -1)
 
-    return true_price, true_quantity
+    return float(round(true_price,2)), float(round(true_quantity+0.5, 0))
 
 
 def get_roots(ols, a_multi=1, b_multi=1):
     '''Получить корни квадратного уравнения'''
-    a = ols.params.get('np_square(average_price)') * a_multi
+    a = ols.params.get('np.square(average_price)') * a_multi
     b = ols.params.get('average_price') * b_multi
     c = ols.params.get('Intercept')
     if c is None:
         c = 0
-        x1 = 0
-        x2 = -b / a
-    else:
-        x1 = (-b + np.sqrt(np.square(b) - (4*a*c)) ) / (2*a)
-        x2 = (-b - np.sqrt(np.square(b) - (4*a*c) )) / (2*a)
+    x1 = (-b + np.sqrt(np.square(b) - (4*a*c)) ) / (2*a)
+    x2 = (-b - np.sqrt(np.square(b) - (4*a*c) )) / (2*a)
     return x1, x2
 
 
