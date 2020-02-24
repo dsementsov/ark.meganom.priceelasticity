@@ -30,7 +30,6 @@ def get_data(season, workday, ticket_type):
 
 
 def prep_data(df, bins, log_q=True):
-    print(df)
     # Only important columns
     data = df[['price', 'qt']]
     data = data[data.qt != ' ']
@@ -42,11 +41,9 @@ def prep_data(df, bins, log_q=True):
     data['average_price'] = data['average_price'].astype(float)
     data = data[['average_price', 'qt']].groupby(by=['average_price']).sum().reset_index()
     data = data[['average_price', 'qt']]
-    print(data)
     if log_q:
         data['qt'] = np.log(data.qt)
     data['qt'] = data['qt'].astype(float)
-    print(data)
     return data
 
 

@@ -102,9 +102,10 @@ export default {
           return response.json()
         }).then(response => {
           var data = response.message
+          console.log(data)
           this.displayResults('<h4>Максимизация прибыли согласно модели</h4>', true)
-          for (var el in data.message) {
-            var m = data.message[el]
+          for (var el in data) {
+            var m = data[el]
             this.displayResults(this.shapeReults({
               ticketType: m.type,
               season: m.season,
