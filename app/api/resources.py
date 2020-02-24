@@ -162,6 +162,7 @@ class PriceElasticityConfig(Resource):
 
     def post(self):
         from app.model.table import Config
+        print(request.get_json())
         payload = request.json
 
         for key, value in payload.items():

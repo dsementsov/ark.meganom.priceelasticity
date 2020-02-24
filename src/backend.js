@@ -8,7 +8,7 @@ let $axios = axios.create({
 
 // Request Interceptor
 $axios.interceptors.request.use(function (config) {
-  config.headers['Authorization'] = 'Fake Token'
+  config.Authorization = 'Fake Token'
   return config
 })
 

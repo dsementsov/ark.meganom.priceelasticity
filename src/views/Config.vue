@@ -75,14 +75,22 @@
 </template>
 
 <script>
-import $backend from '@/backend'
 export default {
   mounted: function () {
     // get all config
-    $backend.getConfig().then(d => {
-      var inputs = document.querySelectorAll('input')
-      for (var el in inputs) {
-        inputs[el].value = d[inputs[el].id]
+    fetch('/api/price-elasticity/config', {
+      method: 'GET'
+    }).then(response => {
+      return response.json()
+    }).then(response => {
+      try {
+        var d = response.message
+        var inputs = document.querySelectorAll('input')
+        for (var el in inputs) {
+          inputs[el].value = d[inputs[el].id]
+        }
+      } catch (error) {
+        console.log(`Problem with element ${el}`)
       }
     })
   },
@@ -90,11 +98,23 @@ export default {
     updateValues () {
       var inputs = document.querySelectorAll('input')
       console.log(inputs)
-      var body = {}
+      var data = {}
       for (var el in inputs) {
-        body[inputs[el].id] = inputs[el].value
+        data[inputs[el].id] = inputs[el].value
       }
-      $backend.postConfig(body).then(response => {
+      fetch('/api/price-elasticity/config', {
+        method: 'POST',
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify(data)
+      }).then(response => {
         console.log('Done!')
       })
     }
