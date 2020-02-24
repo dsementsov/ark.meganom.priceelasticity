@@ -45,7 +45,6 @@
 </template>
 
 <script>
-import $backend from '@/backend'
 import M from 'materialize-css'
 
 export default {
@@ -66,7 +65,11 @@ export default {
   },
   mounted: function () {
     try {
-      $backend.getTicketTypes().then(tt => {
+      fetch('/api/price-elasticity/ticket-types', {
+        method: 'GET'
+      }).then(response => {
+        return response.json()
+      }).then(tt => {
         this.ticketTypes = tt.message
         var sel = document.querySelector('#config_ticket_type')
         for (var el in tt.message) {
@@ -93,7 +96,12 @@ export default {
       var workday = document.querySelector('#config_workday').value
       var intercept = document.querySelector('#config_intercept').value
       if (ticketType !== '' && season !== '' && workday !== '') {
-        $backend.fetchResults(ticketType, season, workday, intercept).then(data => {
+        fetch(`/api/price-elasticity/roots/${ticketType}/${season}/${workday}/${intercept}`,
+          {method: 'GET'
+          }).then(response => {
+          return response.json()
+        }).then(response => {
+          var data = response.message
           this.displayResults('<h4>Максимизация прибыли согласно модели</h4>', true)
           for (var el in data.message) {
             var m = data.message[el]
