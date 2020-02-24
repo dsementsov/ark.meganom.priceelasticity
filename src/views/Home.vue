@@ -45,8 +45,8 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import $backend from '@/backend'
+import M from 'materialize-css'
 
 export default {
   name: 'home',
@@ -69,10 +69,14 @@ export default {
       this.ticketTypes = tt.message
       var sel = document.querySelector('#config_ticket_type')
       for (var el in tt.message) {
-        var opt = document.createElement('option')
-        opt.value = tt.message[el]
-        opt.text = tt.message[el]
-        sel.append(opt)
+        try {
+          var opt = document.createElement('option')
+          opt.value = tt.message[el]
+          opt.text = tt.message[el]
+          sel.append(opt)
+        } catch (error) {
+          console.log(`Problem with element ${el}`)
+        }
       }
       var elems = document.querySelectorAll('select')
       var options = {}
