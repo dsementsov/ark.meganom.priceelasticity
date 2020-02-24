@@ -64,24 +64,27 @@ export default {
       ticketTypes: []
     }
   },
-  beforeMount: function () {
-    $backend.getTicketTypes().then(tt => {
-      this.ticketTypes = tt.message
-      var sel = document.querySelector('#config_ticket_type')
-      for (var el in tt.message) {
-        try {
+  mounted: function () {
+    try {
+      $backend.getTicketTypes().then(tt => {
+        this.ticketTypes = tt.message
+        var sel = document.querySelector('#config_ticket_type')
+        for (var el in tt.message) {
           var opt = document.createElement('option')
           opt.value = tt.message[el]
           opt.text = tt.message[el]
           sel.append(opt)
-        } catch (error) {
-          console.log(`Problem with element ${el}`)
         }
-      }
+        var elems = document.querySelectorAll('select')
+        var options = {}
+        M.FormSelect.init(elems, options)
+      })
+    } catch (error) {
+      console.log(`Problem with element ${error}`)
       var elems = document.querySelectorAll('select')
       var options = {}
       M.FormSelect.init(elems, options)
-    })
+    }
   },
   methods: {
     get_data () {

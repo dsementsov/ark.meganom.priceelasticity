@@ -27,16 +27,29 @@ export default {
     return $axios.get(`price-elasticity/roots/${ticketType}/${season}/${workday}/${intercept}`,
       {timeout: 0})
       .then(response => response.data)
+      .catch(error => {
+        console.log(error.message)
+      })
   },
   getTicketTypes () {
     return $axios.get(`price-elasticity/ticket-types`)
       .then(response => response.data)
+      .catch(error => {
+        console.log(error.message)
+      })
   },
   getConfig () {
     return $axios.get(`price-elasticity/config`)
       .then(response => response.data.message)
+      .catch(error => {
+        console.log(error.message)
+      })
   },
   postConfig (body) {
-    return $axios.post(`price-elasticity/config`, body).then(response => response.data)
+    return $axios.post(`price-elasticity/config`, body)
+      .then(response => response.data)
+      .catch(error => {
+        console.log(error.message)
+      })
   }
 }
