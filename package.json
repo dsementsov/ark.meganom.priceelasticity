@@ -9,9 +9,13 @@
     "postinstall": "yarn build"
   },
   "dependencies": {
+    "@starptech/prettyhtml": "^0.10.0",
+    "@vue/eslint-config-typescript": "^5.0.1",
     "axios": "^0.19.1",
+    "eslint-plugin-es-beautifier": "^1.0.1",
     "materialize": "^1.0.0",
     "materialize-css": "^1.0.0-rc.2",
+    "typescript-eslint": "^0.0.1-alpha.0",
     "vue": "^2.5.13",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"

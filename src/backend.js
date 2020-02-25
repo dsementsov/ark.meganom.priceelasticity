@@ -22,7 +22,6 @@ $axios.interceptors.response.use(function (response) {
 })
 
 export default {
-
   fetchResults (ticketType, season, workday, intercept) {
     return $axios.get(`price-elasticity/roots/${ticketType}/${season}/${workday}/${intercept}`,
       {timeout: 0})

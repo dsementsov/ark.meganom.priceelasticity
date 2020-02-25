@@ -2,5 +2,13 @@
     "python.pythonPath": "/Users/denyssementsov/Venvs/ark.meganom.priceelasticity-chNnxQWD/bin/python",
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
-    "python.linting.flake8Args": ["-max-line-length 100"]
+    "python.linting.flake8Args": ["-max-line-length 100"],
+    "vetur.format.options.tabSize": 2,
+    "vetur.format.options.useTabs": false,
+    "vetur.format.defaultFormatter.html": "js-beautify-html",
+    "vetur.format.defaultFormatterOptions": {
+    "js-beautify-html": {
+      "wrap_attributes": "auto"
+        }
+    },
 }
