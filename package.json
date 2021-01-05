@@ -11,7 +11,7 @@
   "dependencies": {
     "@starptech/prettyhtml": "^0.10.0",
     "@vue/eslint-config-typescript": "^5.0.1",
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "eslint-plugin-es-beautifier": "^1.0.1",
     "materialize": "^1.0.0",
     "materialize-css": "^1.0.0-rc.2",
